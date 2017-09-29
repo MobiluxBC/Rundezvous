@@ -1,0 +1,6 @@
+framework module Pods_RundezvousS4 {
+  umbrella header "Pods-RundezvousS4-umbrella.h"
+
+  export *
+  module * { export * }
+}

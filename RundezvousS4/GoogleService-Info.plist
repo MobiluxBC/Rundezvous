@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>615818219875-b0pfi88kt1rlqiidnoend14gvdfmpcd7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.615818219875-b0pfi88kt1rlqiidnoend14gvdfmpcd7</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBomcc-YZ74yUnEIKbZrDlQJcI1lTDYXbM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>615818219875</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.mobilux.RundezvousS4</string>
+	<key>PROJECT_ID</key>
+	<string>rundezvous-9281f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>rundezvous-9281f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:615818219875:ios:95d108192a9beeb1</string>
+	<key>DATABASE_URL</key>
+	<string>https://rundezvous-9281f.firebaseio.com</string>
+</dict>
+</plist>
