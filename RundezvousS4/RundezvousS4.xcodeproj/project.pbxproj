@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		603B25DD1F7F425C00576962 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603B25DC1F7F425C00576962 /* MenuController.swift */; };
+		603B25DF1F7F43C900576962 /* HostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603B25DE1F7F43C900576962 /* HostController.swift */; };
+		603B25E11F7F43F300576962 /* JoinController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603B25E01F7F43F300576962 /* JoinController.swift */; };
+		603B25E31F7F4CC900576962 /* HelpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603B25E21F7F4CC900576962 /* HelpController.swift */; };
 		60FA49FA1F7EE15000C19574 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FA49F91F7EE15000C19574 /* AppDelegate.swift */; };
 		60FA49FC1F7EE15000C19574 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FA49FB1F7EE15000C19574 /* ViewController.swift */; };
 		60FA49FF1F7EE15000C19574 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60FA49FD1F7EE15000C19574 /* Main.storyboard */; };
@@ -14,7 +18,7 @@
 		60FA4A041F7EE15000C19574 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60FA4A021F7EE15000C19574 /* LaunchScreen.storyboard */; };
 		60FA4A0F1F7EE15000C19574 /* RundezvousS4Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FA4A0E1F7EE15000C19574 /* RundezvousS4Tests.swift */; };
 		60FA4A1E1F7EEBAB00C19574 /* AuthProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FA4A1D1F7EEBAB00C19574 /* AuthProvider.swift */; };
-		60FA4A211F7EF17C00C19574 /* MainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FA4A201F7EF17C00C19574 /* MainController.swift */; };
+		60FA4A211F7EF17C00C19574 /* MapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FA4A201F7EF17C00C19574 /* MapController.swift */; };
 		60FA4A231F7EF1EE00C19574 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 60FA4A221F7EF1ED00C19574 /* GoogleService-Info.plist */; };
 		A512B930C5A2C7D40358301E /* Pods_RundezvousS4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 475CF75CE047C7398390185E /* Pods_RundezvousS4.framework */; };
 		C1141E0AFE01C5DD052B72A9 /* Pods_RundezvousS4Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A19AD9FA77FA86A8E87685BC /* Pods_RundezvousS4Tests.framework */; };
@@ -32,6 +36,10 @@
 
 /* Begin PBXFileReference section */
 		475CF75CE047C7398390185E /* Pods_RundezvousS4.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RundezvousS4.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		603B25DC1F7F425C00576962 /* MenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
+		603B25DE1F7F43C900576962 /* HostController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostController.swift; sourceTree = "<group>"; };
+		603B25E01F7F43F300576962 /* JoinController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinController.swift; sourceTree = "<group>"; };
+		603B25E21F7F4CC900576962 /* HelpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpController.swift; sourceTree = "<group>"; };
 		60FA49F61F7EE15000C19574 /* RundezvousS4.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RundezvousS4.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60FA49F91F7EE15000C19574 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60FA49FB1F7EE15000C19574 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -43,7 +51,7 @@
 		60FA4A0E1F7EE15000C19574 /* RundezvousS4Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RundezvousS4Tests.swift; sourceTree = "<group>"; };
 		60FA4A101F7EE15000C19574 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		60FA4A1D1F7EEBAB00C19574 /* AuthProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthProvider.swift; sourceTree = "<group>"; };
-		60FA4A201F7EF17C00C19574 /* MainController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainController.swift; sourceTree = "<group>"; };
+		60FA4A201F7EF17C00C19574 /* MapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapController.swift; sourceTree = "<group>"; };
 		60FA4A221F7EF1ED00C19574 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		61F18F914169B3129A177039 /* Pods-RundezvousS4Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RundezvousS4Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RundezvousS4Tests/Pods-RundezvousS4Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		A19AD9FA77FA86A8E87685BC /* Pods_RundezvousS4Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RundezvousS4Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,7 +145,11 @@
 			isa = PBXGroup;
 			children = (
 				60FA49FB1F7EE15000C19574 /* ViewController.swift */,
-				60FA4A201F7EF17C00C19574 /* MainController.swift */,
+				60FA4A201F7EF17C00C19574 /* MapController.swift */,
+				603B25DC1F7F425C00576962 /* MenuController.swift */,
+				603B25DE1F7F43C900576962 /* HostController.swift */,
+				603B25E01F7F43F300576962 /* JoinController.swift */,
+				603B25E21F7F4CC900576962 /* HelpController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -392,8 +404,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60FA4A211F7EF17C00C19574 /* MainController.swift in Sources */,
+				603B25DD1F7F425C00576962 /* MenuController.swift in Sources */,
+				60FA4A211F7EF17C00C19574 /* MapController.swift in Sources */,
 				60FA4A1E1F7EEBAB00C19574 /* AuthProvider.swift in Sources */,
+				603B25DF1F7F43C900576962 /* HostController.swift in Sources */,
+				603B25E31F7F4CC900576962 /* HelpController.swift in Sources */,
+				603B25E11F7F43F300576962 /* JoinController.swift in Sources */,
 				60FA49FC1F7EE15000C19574 /* ViewController.swift in Sources */,
 				60FA49FA1F7EE15000C19574 /* AppDelegate.swift in Sources */,
 			);
