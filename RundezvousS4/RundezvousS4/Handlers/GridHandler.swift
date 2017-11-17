@@ -29,6 +29,8 @@ class GridHandler {
     public func getPoints(handler : Handler?) -> Void {
         if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse)
         {
+            print("getting triggered")
+            
             var lat, long : Double
             // Rounding Lat/Long to 6 decimal places
             //lat = Double(round(1000000*(locManager.location?.coordinate.latitude ?? -1))/1000000)
@@ -41,10 +43,10 @@ class GridHandler {
             
             // Variable for the grid nw=NorthWest se=SouthEast
             // 0.000027 = about 3m
-            let nwLat = lat + (20*0.00003)
-            let nwLong = long - (20*0.00003)
-            let seLat = lat - (20*0.00003)
-            let seLong = long + (20*0.00003)
+            let nwLat = lat + (30*0.00003)
+            let nwLong = long - (30*0.00003)
+            let seLat = lat - (30*0.00003)
+            let seLong = long + (30*0.00003)
             
             //Sample URL for the api call: https://api.what3words.com/v2/grid?bbox=52.208867,0.117540,52.207988,0.116126&format=json&key=BJEVPZLZ
             // Subbing in the calucalted bounding
@@ -57,7 +59,6 @@ class GridHandler {
                     // Convert the data to JSON
                     let json = JSON(data: data)
                     
-                    print(json["lines"])
                     let lineObject = json["lines"]
                     
                     var lats = Set<Double>()
@@ -86,27 +87,29 @@ class GridHandler {
                         points.append(currentRow)
                     }
                     
-                    for row in points {
-                        for col in row {
-                            print("\(col.latitude), \(col.longitude)")
-                        }
-                    }
-                    
                     var randomSquares = [Square]()
                     var i = 0
                     
+                    print("The count of lats:  \(sortedLats.count)")
+                    print("The count of longs: \(sortedLongs.count)")
+                    
                     while i < 10 {
-                        let randomRow    = Int(arc4random_uniform(UInt32(sortedLats.count)))
-                        let randomColumn = Int(arc4random_uniform(UInt32(sortedLongs.count)))
+                        let randomRow    = Int(arc4random_uniform(UInt32(sortedLats.count  - 1)))
+                        let randomColumn = Int(arc4random_uniform(UInt32(sortedLongs.count - 1)))
                         
-                        if (randomRow + 1 > sortedLats.count || randomColumn + 1 > sortedLongs.count) {
+                        print("Random row: \(randomRow)")
+                        print("Random column: \(randomColumn)")
+                        
+                        if ((randomRow + 1) > sortedLats.count || (randomColumn + 1) > sortedLongs.count) {
                             i -= 1
                         } else {
+                            
                             let square : Square = Square(
                                 topLeftCoord     : points[randomRow][randomColumn],
                                 bottomRightCoord : points[randomRow + 1][randomColumn + 1])
                             randomSquares.append(square)
                             i += 1
+                            
                         }
                     }
                     
