@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import GoogleSignIn
 
-class ViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDelegate {
+class SignInController: UIViewController, GIDSignInDelegate, GIDSignInUIDelegate {
 
     private let LOGIN_SEGUE = "LoginToMain"
     
@@ -81,7 +81,7 @@ class ViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDelegate {
 }
 
 // Google Related Stuff
-extension ViewController {
+extension SignInController {
     @IBAction func signInWithGoogle(_ sender: Any) {
         // Initialize sign-in
         

@@ -15,7 +15,7 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
     
     private var locationMAnager = CLLocationManager()
     private var userLocation : CLLocationCoordinate2D?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,14 +23,21 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
         // Do any additional setup after loading the view.
     }
     
+    private func dropPoints() {
+        GridHandler.Instance.getPoints { (squares) in
+            for square in squares {
+                self.dropPinAtCoordinate(c: square.center!)
+            }
+        }
+    }
+    
     private func initializeLocationManager() {
         locationMAnager.delegate = self
         locationMAnager.desiredAccuracy = kCLLocationAccuracyBest
         locationMAnager.requestWhenInUseAuthorization()
         locationMAnager.startUpdatingLocation()
-        
     }
-    
+
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         // if we have the coordinates from the manager
@@ -39,17 +46,42 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
             userLocation = CLLocationCoordinate2D(latitude : location.latitude, longitude : location.longitude)
             
             let region = MKCoordinateRegion(center : userLocation!,
-                                            span : MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta : 0.01 ))
+                                            span : MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta : 0.001 ))
             
             myMap.setRegion(region , animated : true)
-            myMap.removeAnnotations(myMap.annotations)
             
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = userLocation!
-            myMap.addAnnotation(annotation)
-            
+            // Drop the points once the user location has been set
+            self.dropPoints()
         }
+    }
+    
+    func dropPinAtCoordinate(c : CLLocationCoordinate2D) {
+        print("\(c.latitude) \(c.longitude)")
         
+        let myAnnotation: MKPointAnnotation = MKPointAnnotation()
+        myAnnotation.coordinate = CLLocationCoordinate2DMake(c.latitude, c.longitude);
+        
+        let myPinAnnotation : MKPinAnnotationView = MKPinAnnotationView()
+        myPinAnnotation.annotation = myAnnotation
+        myPinAnnotation.backgroundColor = UIColor.black
+        
+        myMap.addAnnotation(myAnnotation)
+    }
+    
+    func getTopLeftCorner(_ map: MKMapView) -> CLLocationCoordinate2D {
+        return map.convert(CGPoint(x: 0, y:0), toCoordinateFrom: map)
+    }
+    
+    func getTopRightCorner(_ map: MKMapView) -> CLLocationCoordinate2D {
+        return map.convert(CGPoint(x: map.frame.width, y:0), toCoordinateFrom: map)
+    }
+    
+    func getBottomRightCorner(_ map: MKMapView) -> CLLocationCoordinate2D {
+        return map.convert(CGPoint(x: map.frame.width, y:0), toCoordinateFrom: map)
+    }
+    
+    func getBottomLeftCorner(_ map: MKMapView) -> CLLocationCoordinate2D {
+        return map.convert(CGPoint(x: 0, y:map.frame.height), toCoordinateFrom: map)
     }
     
     override func viewWillAppear(_ animated: Bool) {

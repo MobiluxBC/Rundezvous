@@ -23,7 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
         return true
     }
-
+    
+    /*
     @available(iOS 9.0, *)
     func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any])
         -> Bool {
@@ -44,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                  sourceApplication: sourceApplication,
                                                  annotation: annotation)
     }
+     */
     
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -68,5 +70,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 
+}
+
+extension Array
+{
+    func random() -> Element
+    {
+        return self[Int(arc4random_uniform(UInt32(self.count)))]
+    }
 }
 
