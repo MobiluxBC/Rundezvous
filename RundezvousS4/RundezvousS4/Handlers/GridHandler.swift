@@ -18,6 +18,9 @@ class GridHandler {
     
     var locManager = CLLocationManager()
     
+    //instantiated in
+    var lines : JSON?
+    
     static let _instance = GridHandler()
     
     static var Instance : GridHandler {
@@ -59,7 +62,9 @@ class GridHandler {
                     // Convert the data to JSON
                     let json = JSON(data: data)
                     
-                    let lineObject = json["lines"]
+                    GridHandler.Instance.lines = json["lines"]
+                    GridHandler.Instance.lines!["error"] = JSON.null
+                    let lineObject = self.lines!
                     
                     var lats = Set<Double>()
                     var longs = Set<Double>();

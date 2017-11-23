@@ -426,7 +426,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="myMap" destination="VhC-H9-0jP" id="XaX-j9-3t5"/>
+                        <outlet property="mapView" destination="VhC-H9-0jP" id="WWu-Ik-GlI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s9X-cX-hpf" userLabel="First Responder" sceneMemberID="firstResponder"/>

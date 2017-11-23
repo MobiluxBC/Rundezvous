@@ -8,18 +8,25 @@
 
 import UIKit
 import MapKit
+import SwiftyJSON
 
 class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     
-    @IBOutlet weak var myMap: MKMapView!
+    @IBOutlet var mapView: MKMapView!
     
     private var locationMAnager = CLLocationManager()
     private var userLocation : CLLocationCoordinate2D?
+    private var isFirstLocationUpdate : Bool = true
+    private var polylines : [MKPolyline] = [MKPolyline]()
+    var overlays : [MKOverlay]!
+    let dgHavePoints : DispatchGroup = DispatchGroup()
+    let dgHaveDrawnPolyLines : DispatchGroup = DispatchGroup()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         initializeLocationManager()
+        mapView.delegate = self
         // Do any additional setup after loading the view.
     }
     
@@ -28,6 +35,7 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
             for square in squares {
                 self.dropPinAtCoordinate(c: square.center!)
             }
+            self.dgHavePoints.leave()
         }
     }
     
@@ -45,13 +53,22 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
             
             userLocation = CLLocationCoordinate2D(latitude : location.latitude, longitude : location.longitude)
             
-            let region = MKCoordinateRegion(center : userLocation!,
-                                            span : MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta : 0.001 ))
-            
-            myMap.setRegion(region , animated : true)
             
             // Drop the points once the user location has been set
-            self.dropPoints()
+            // only if this is the first location update
+            if(self.isFirstLocationUpdate) {
+                let region = MKCoordinateRegion(center : userLocation!,
+                                                span : MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta : 0.001 ))
+                
+                mapView.setRegion(region , animated : true)
+                dgHavePoints.enter()
+                self.dropPoints()
+                self.isFirstLocationUpdate = false
+                
+                dgHavePoints.notify(queue: .main, execute: {
+                    self.drawGridPolyLines()
+                })
+            }
         }
     }
     
@@ -65,7 +82,41 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
         myPinAnnotation.annotation = myAnnotation
         myPinAnnotation.backgroundColor = UIColor.black
         
-        myMap.addAnnotation(myAnnotation)
+        mapView.addAnnotation(myAnnotation)
+    }
+    
+    func drawGridPolyLines() {
+        let lines = GridHandler.Instance.lines ?? JSON(["error": "no lines"])
+        //let polyline = MKPolyline(coordinates: &points, count: 2)
+        if(lines["error"] == JSON.null ){
+            //dgHaveDrawnPolyLines.enter()
+            for i in 0...lines.count-1 {
+                let start = CLLocationCoordinate2D(latitude: lines[i]["start"]["lat"].double!, longitude: lines[i]["start"]["lng"].double!)
+                let end = CLLocationCoordinate2D(latitude: lines[i]["end"]["lat"].double!, longitude: lines[i]["end"]["lng"].double!)
+                let line = [CLLocationCoordinate2D](arrayLiteral: start, end)
+                let polyline = MKPolyline(coordinates: line, count: 2)
+                self.mapView.add(polyline, level: .aboveRoads)
+            }
+            for item : MKOverlay in mapView.overlays {
+                print(item.debugDescription ?? "overlay is null")
+            }
+        }else {
+            print(lines["error"])
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if overlay.isKind(of: MKPolyline.self) {
+            // draw the track
+            print("calling overlay renderer")
+            let polyLine = overlay
+            let polyLineRenderer = MKPolylineRenderer(overlay: polyLine)
+            polyLineRenderer.strokeColor = UIColor.blue
+            polyLineRenderer.lineWidth = 2.0
+            
+            return polyLineRenderer
+        }
+        return MKPolylineRenderer()
     }
     
     func getTopLeftCorner(_ map: MKMapView) -> CLLocationCoordinate2D {
