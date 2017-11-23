@@ -14,6 +14,11 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
     
     @IBOutlet var mapView: MKMapView!
     
+    enum PopUpState {
+        case OPEN
+        case CLOSED
+    }
+    
     private var locationMAnager = CLLocationManager()
     private var userLocation : CLLocationCoordinate2D?
     private var isFirstLocationUpdate : Bool = true
@@ -21,6 +26,8 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
     var overlays : [MKOverlay]!
     let dgHavePoints : DispatchGroup = DispatchGroup()
     let dgHaveDrawnPolyLines : DispatchGroup = DispatchGroup()
+    var popUpState : PopUpState = PopUpState.CLOSED
+    var squares : [Square]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +39,7 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
     
     private func dropPoints() {
         GridHandler.Instance.getPoints { (squares) in
+            self.squares = squares
             for square in squares {
                 self.dropPinAtCoordinate(c: square.center!)
             }
@@ -43,7 +51,34 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
         locationMAnager.delegate = self
         locationMAnager.desiredAccuracy = kCLLocationAccuracyBest
         locationMAnager.requestWhenInUseAuthorization()
+        locationMAnager.activityType = CLActivityType.fitness
+        locationMAnager.distanceFilter = kCLDistanceFilterNone
         locationMAnager.startUpdatingLocation()
+        locationMAnager.startUpdatingHeading()
+    }
+    
+    func dismissPopUp(_ : UIAlertAction) -> Void{
+        print("in dismiss Popup")
+        popUpState = PopUpState.CLOSED
+    }
+    
+    func popUp(message: String) -> Void {
+        print("In popup")
+        var alertText : String = "\n\n\n\n\n\n\n\n\n\n\n\n"
+        if(!message.isEmpty){
+            alertText += message
+        }
+        let alertMessage = UIAlertController(title: "My Title", message: alertText, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: self.dismissPopUp)
+        alertMessage.addAction(action)
+        self.present(alertMessage, animated: true, completion: nil)
+        let xPosition = alertMessage.view.frame.origin.x + 80
+        let rectImg = #imageLiteral(resourceName: "goldbag")
+        let rect : CGRect = CGRect(x: xPosition, y: 100, width: 100, height: 100)
+        //rectImg.draw(in: rect)
+        let imageView = UIImageView(frame: rect)
+        imageView.image = rectImg
+        alertMessage.view.addSubview(imageView)
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -52,6 +87,17 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
         if let location = locationMAnager.location?.coordinate {
             
             userLocation = CLLocationCoordinate2D(latitude : location.latitude, longitude : location.longitude)
+            
+            if(!self.isFirstLocationUpdate && squares != nil){
+                if(userLocation != nil && isUserInSquares(location: userLocation!)){
+                    if(popUpState == .CLOSED){
+                        popUp(message: "You found a bag of gold")
+                        //TODO: Increment score
+                        
+                        
+                    }
+                }
+            }
             
             
             // Drop the points once the user location has been set
@@ -70,6 +116,23 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
                 })
             }
         }
+    }
+    
+    //lattitude increases north, longitude increases west
+    func isUserInSquares(location: CLLocationCoordinate2D) -> Bool {
+        for square in squares! {
+            if(!square.visited!){
+                if(Double(userLocation!.latitude) < Double(square.topLeftCoords!.latitude) && Double(square.bottomRightCoords!.latitude) <
+                    Double(userLocation!.latitude) &&
+                        Double(square.topLeftCoords!.longitude) < Double(userLocation!.longitude) && Double(userLocation!.longitude) <
+                                Double(square.bottomRightCoords!.longitude)){
+                    //set square as visited
+                    square.visited = true
+                    return true
+                }
+            }
+        }
+        return false
     }
     
     func dropPinAtCoordinate(c : CLLocationCoordinate2D) {

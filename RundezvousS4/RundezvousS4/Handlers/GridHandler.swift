@@ -44,12 +44,14 @@ class GridHandler {
             print("Longitude--> \(long) ")
             
             
+            
+            
             // Variable for the grid nw=NorthWest se=SouthEast
             // 0.000027 = about 3m
-            let nwLat = lat + (30*0.00003)
-            let nwLong = long - (30*0.00003)
-            let seLat = lat - (30*0.00003)
-            let seLong = long + (30*0.00003)
+            let nwLat = lat + (5*0.00003)
+            let nwLong = long - (5*0.00003)
+            let seLat = lat - (5*0.00003)
+            let seLong = long + (5*0.00003)
             
             //Sample URL for the api call: https://api.what3words.com/v2/grid?bbox=52.208867,0.117540,52.207988,0.116126&format=json&key=BJEVPZLZ
             // Subbing in the calucalted bounding
@@ -112,6 +114,7 @@ class GridHandler {
                             let square : Square = Square(
                                 topLeftCoord     : points[randomRow][randomColumn],
                                 bottomRightCoord : points[randomRow + 1][randomColumn + 1])
+                            square.visited = false
                             randomSquares.append(square)
                             i += 1
                             
