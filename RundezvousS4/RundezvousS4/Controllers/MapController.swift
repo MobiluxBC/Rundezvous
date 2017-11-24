@@ -8,26 +8,42 @@
 
 import UIKit
 import MapKit
+import SwiftyJSON
 
 class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     
-    @IBOutlet weak var myMap: MKMapView!
+    @IBOutlet var mapView: MKMapView!
+    
+    enum PopUpState {
+        case OPEN
+        case CLOSED
+    }
     
     private var locationMAnager = CLLocationManager()
     private var userLocation : CLLocationCoordinate2D?
+    private var isFirstLocationUpdate : Bool = true
+    private var polylines : [MKPolyline] = [MKPolyline]()
+    var overlays : [MKOverlay]!
+    let dgHavePoints : DispatchGroup = DispatchGroup()
+    let dgHaveDrawnPolyLines : DispatchGroup = DispatchGroup()
+    var popUpState : PopUpState = PopUpState.CLOSED
+    var squares : [Square]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         initializeLocationManager()
+        mapView.delegate = self
         // Do any additional setup after loading the view.
     }
     
     private func dropPoints() {
         GridHandler.Instance.getPoints { (squares) in
+            self.squares = squares
             for square in squares {
                 self.dropPinAtCoordinate(c: square.center!)
             }
+            self.dgHavePoints.leave()
         }
     }
     
@@ -35,7 +51,34 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
         locationMAnager.delegate = self
         locationMAnager.desiredAccuracy = kCLLocationAccuracyBest
         locationMAnager.requestWhenInUseAuthorization()
+        locationMAnager.activityType = CLActivityType.fitness
+        locationMAnager.distanceFilter = kCLDistanceFilterNone
         locationMAnager.startUpdatingLocation()
+        locationMAnager.startUpdatingHeading()
+    }
+    
+    func dismissPopUp(_ : UIAlertAction) -> Void{
+        print("in dismiss Popup")
+        popUpState = PopUpState.CLOSED
+    }
+    
+    func popUp(message: String) -> Void {
+        print("In popup")
+        var alertText : String = "\n\n\n\n\n\n\n\n\n\n\n\n"
+        if(!message.isEmpty){
+            alertText += message
+        }
+        let alertMessage = UIAlertController(title: "My Title", message: alertText, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: self.dismissPopUp)
+        alertMessage.addAction(action)
+        self.present(alertMessage, animated: true, completion: nil)
+        let xPosition = alertMessage.view.frame.origin.x + 80
+        let rectImg = #imageLiteral(resourceName: "goldbag")
+        let rect : CGRect = CGRect(x: xPosition, y: 100, width: 100, height: 100)
+        //rectImg.draw(in: rect)
+        let imageView = UIImageView(frame: rect)
+        imageView.image = rectImg
+        alertMessage.view.addSubview(imageView)
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -45,14 +88,51 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
             
             userLocation = CLLocationCoordinate2D(latitude : location.latitude, longitude : location.longitude)
             
-            let region = MKCoordinateRegion(center : userLocation!,
-                                            span : MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta : 0.001 ))
+            if(!self.isFirstLocationUpdate && squares != nil){
+                if(userLocation != nil && isUserInSquares(location: userLocation!)){
+                    if(popUpState == .CLOSED){
+                        popUp(message: "You found a bag of gold")
+                        //TODO: Increment score
+                        
+                        
+                    }
+                }
+            }
             
-            myMap.setRegion(region , animated : true)
             
             // Drop the points once the user location has been set
-            self.dropPoints()
+            // only if this is the first location update
+            if(self.isFirstLocationUpdate) {
+                let region = MKCoordinateRegion(center : userLocation!,
+                                                span : MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta : 0.001 ))
+                
+                mapView.setRegion(region , animated : true)
+                dgHavePoints.enter()
+                self.dropPoints()
+                self.isFirstLocationUpdate = false
+                
+                dgHavePoints.notify(queue: .main, execute: {
+                    self.drawGridPolyLines()
+                })
+            }
         }
+    }
+    
+    //lattitude increases north, longitude increases west
+    func isUserInSquares(location: CLLocationCoordinate2D) -> Bool {
+        for square in squares! {
+            if(!square.visited!){
+                if(Double(userLocation!.latitude) < Double(square.topLeftCoords!.latitude) && Double(square.bottomRightCoords!.latitude) <
+                    Double(userLocation!.latitude) &&
+                        Double(square.topLeftCoords!.longitude) < Double(userLocation!.longitude) && Double(userLocation!.longitude) <
+                                Double(square.bottomRightCoords!.longitude)){
+                    //set square as visited
+                    square.visited = true
+                    return true
+                }
+            }
+        }
+        return false
     }
     
     func dropPinAtCoordinate(c : CLLocationCoordinate2D) {
@@ -65,7 +145,41 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
         myPinAnnotation.annotation = myAnnotation
         myPinAnnotation.backgroundColor = UIColor.black
         
-        myMap.addAnnotation(myAnnotation)
+        mapView.addAnnotation(myAnnotation)
+    }
+    
+    func drawGridPolyLines() {
+        let lines = GridHandler.Instance.lines ?? JSON(["error": "no lines"])
+        //let polyline = MKPolyline(coordinates: &points, count: 2)
+        if(lines["error"] == JSON.null ){
+            //dgHaveDrawnPolyLines.enter()
+            for i in 0...lines.count-1 {
+                let start = CLLocationCoordinate2D(latitude: lines[i]["start"]["lat"].double!, longitude: lines[i]["start"]["lng"].double!)
+                let end = CLLocationCoordinate2D(latitude: lines[i]["end"]["lat"].double!, longitude: lines[i]["end"]["lng"].double!)
+                let line = [CLLocationCoordinate2D](arrayLiteral: start, end)
+                let polyline = MKPolyline(coordinates: line, count: 2)
+                self.mapView.add(polyline, level: .aboveRoads)
+            }
+            for item : MKOverlay in mapView.overlays {
+                print(item.debugDescription ?? "overlay is null")
+            }
+        }else {
+            print(lines["error"])
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if overlay.isKind(of: MKPolyline.self) {
+            // draw the track
+            print("calling overlay renderer")
+            let polyLine = overlay
+            let polyLineRenderer = MKPolylineRenderer(overlay: polyLine)
+            polyLineRenderer.strokeColor = UIColor.blue
+            polyLineRenderer.lineWidth = 2.0
+            
+            return polyLineRenderer
+        }
+        return MKPolylineRenderer()
     }
     
     func getTopLeftCorner(_ map: MKMapView) -> CLLocationCoordinate2D {
