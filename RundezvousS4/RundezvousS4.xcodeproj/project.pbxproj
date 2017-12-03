@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		13E94ACF1FD3704E006199CC /* ScoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E94ACE1FD3704E006199CC /* ScoreViewController.swift */; };
 		602236681FBE6A43007F6D9A /* ColoredMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602236671FBE6A43007F6D9A /* ColoredMarker.swift */; };
 		6022366A1FBE7DAC007F6D9A /* Square.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602236691FBE7DAC007F6D9A /* Square.swift */; };
 		6022366D1FBE9751007F6D9A /* GridHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6022366C1FBE9751007F6D9A /* GridHandler.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		13E94ACE1FD3704E006199CC /* ScoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreViewController.swift; sourceTree = "<group>"; };
 		475CF75CE047C7398390185E /* Pods_RundezvousS4.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RundezvousS4.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		602236671FBE6A43007F6D9A /* ColoredMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredMarker.swift; sourceTree = "<group>"; };
 		602236691FBE7DAC007F6D9A /* Square.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Square.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 				603B25E01F7F43F300576962 /* JoinController.swift */,
 				603B25E21F7F4CC900576962 /* HelpController.swift */,
 				602236731FBF6470007F6D9A /* SettingsViewController.swift */,
+				13E94ACE1FD3704E006199CC /* ScoreViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -434,6 +437,7 @@
 			files = (
 				6022366A1FBE7DAC007F6D9A /* Square.swift in Sources */,
 				603B25DD1F7F425C00576962 /* MenuController.swift in Sources */,
+				13E94ACF1FD3704E006199CC /* ScoreViewController.swift in Sources */,
 				60FA4A211F7EF17C00C19574 /* MapController.swift in Sources */,
 				602236701FBF62C7007F6D9A /* RundePoint.swift in Sources */,
 				60FA4A1E1F7EEBAB00C19574 /* AuthProvider.swift in Sources */,
@@ -601,7 +605,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KC6X8H2M7L;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = RundezvousS4/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bcit.comp4977.RundezvousS4.Bryn;
@@ -619,7 +623,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KC6X8H2M7L;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = RundezvousS4/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bcit.comp4977.RundezvousS4.Bryn;

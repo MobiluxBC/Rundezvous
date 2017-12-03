@@ -18,7 +18,10 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
         case OPEN
         case CLOSED
     }
-    
+    var time = 60;
+    var timerObject = Timer();
+    var score = 0;
+    @IBOutlet weak var timer: UILabel!
     private var locationMAnager = CLLocationManager()
     private var userLocation : CLLocationCoordinate2D?
     private var isFirstLocationUpdate : Bool = true
@@ -28,15 +31,33 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
     let dgHaveDrawnPolyLines : DispatchGroup = DispatchGroup()
     var popUpState : PopUpState = PopUpState.CLOSED
     var squares : [Square]?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        initializeLocationManager()
-        mapView.delegate = self
-        // Do any additional setup after loading the view.
+    
+    
+    @objc func action(){
+        time -= 1
+        timer.text = String(time);
+        if(time == 0){
+            
+            performSegue(withIdentifier: "outOfTimeSegue", sender: nil)
+            dismiss(animated: true, completion: nil)
+            
+        }
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        timer.text = String(time);
+        initializeLocationManager()
+        mapView.delegate = self
+        timerObject = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(MapController.action), userInfo: nil, repeats: true)
+        // Do any additional setup after loading the view.
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            if (segue.identifier == "outOfTimeSegue") {
+            let secondViewController = segue.destination as! ScoreViewController
+            secondViewController.finalScore = String(score);
+        }
+    }
     private func dropPoints() {
         GridHandler.Instance.getPoints { (squares) in
             self.squares = squares
@@ -63,6 +84,7 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
     }
     
     func popUp(message: String) -> Void {
+        score += 1;
         print("In popup")
         var alertText : String = "\n\n\n\n\n\n\n\n\n\n\n\n"
         if(!message.isEmpty){
