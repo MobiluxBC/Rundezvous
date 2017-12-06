@@ -18,6 +18,7 @@
 		603B25DF1F7F43C900576962 /* HostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603B25DE1F7F43C900576962 /* HostController.swift */; };
 		603B25E11F7F43F300576962 /* JoinController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603B25E01F7F43F300576962 /* JoinController.swift */; };
 		603B25E31F7F4CC900576962 /* HelpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603B25E21F7F4CC900576962 /* HelpController.swift */; };
+		604917091FD7C0B100D98D53 /* Connectivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604917081FD7C0B100D98D53 /* Connectivity.swift */; };
 		60FA49FA1F7EE15000C19574 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FA49F91F7EE15000C19574 /* AppDelegate.swift */; };
 		60FA49FC1F7EE15000C19574 /* SignInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FA49FB1F7EE15000C19574 /* SignInController.swift */; };
 		60FA49FF1F7EE15000C19574 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60FA49FD1F7EE15000C19574 /* Main.storyboard */; };
@@ -54,6 +55,7 @@
 		603B25DE1F7F43C900576962 /* HostController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostController.swift; sourceTree = "<group>"; };
 		603B25E01F7F43F300576962 /* JoinController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinController.swift; sourceTree = "<group>"; };
 		603B25E21F7F4CC900576962 /* HelpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpController.swift; sourceTree = "<group>"; };
+		604917081FD7C0B100D98D53 /* Connectivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connectivity.swift; sourceTree = "<group>"; };
 		60FA49F61F7EE15000C19574 /* RundezvousS4.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RundezvousS4.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60FA49F91F7EE15000C19574 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60FA49FB1F7EE15000C19574 /* SignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInController.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 		6022366B1FBE973F007F6D9A /* Handlers */ = {
 			isa = PBXGroup;
 			children = (
+				604917081FD7C0B100D98D53 /* Connectivity.swift */,
 				6022366C1FBE9751007F6D9A /* GridHandler.swift */,
 				602236711FBF63AA007F6D9A /* SettingsHandler.swift */,
 			);
@@ -356,6 +359,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-RundezvousS4/Pods-RundezvousS4-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
@@ -365,6 +369,7 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
@@ -447,6 +452,7 @@
 				603B25E11F7F43F300576962 /* JoinController.swift in Sources */,
 				602236741FBF6470007F6D9A /* SettingsViewController.swift in Sources */,
 				602236721FBF63AA007F6D9A /* SettingsHandler.swift in Sources */,
+				604917091FD7C0B100D98D53 /* Connectivity.swift in Sources */,
 				602236681FBE6A43007F6D9A /* ColoredMarker.swift in Sources */,
 				60FA49FC1F7EE15000C19574 /* SignInController.swift in Sources */,
 				60FA49FA1F7EE15000C19574 /* AppDelegate.swift in Sources */,

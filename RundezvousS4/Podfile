@@ -13,6 +13,7 @@ target 'RundezvousS4' do
   pod 'Firebase/Database'
   pod 'GoogleSignIn'
   pod 'SwiftyJSON'
+  pod 'Alamofire', '~> 4.5'
 
   target 'RundezvousS4Tests' do
     inherit! :search_paths

@@ -52,12 +52,14 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
         timerObject = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(MapController.action), userInfo: nil, repeats: true)
         // Do any additional setup after loading the view.
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
             if (segue.identifier == "outOfTimeSegue") {
             let secondViewController = segue.destination as! ScoreViewController
             secondViewController.finalScore = String(score);
         }
     }
+    
     private func dropPoints() {
         GridHandler.Instance.getPoints { (squares) in
             self.squares = squares

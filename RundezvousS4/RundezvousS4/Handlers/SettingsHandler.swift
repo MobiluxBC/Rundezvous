@@ -17,7 +17,7 @@ class SettingsHandler {
         return _instance;
     }
     
-    var gridInMeters    : Double = 30
-    var rundePointsCount: Int    = 15
+    var gridInMeters    : Double = 5
+    var rundePointsCount: Int    = 10
     
 }

@@ -44,14 +44,12 @@ class GridHandler {
             print("Longitude--> \(long) ")
             
             
-            
-            
             // Variable for the grid nw=NorthWest se=SouthEast
             // 0.000027 = about 3m
-            let nwLat = lat + (5*0.00003)
-            let nwLong = long - (5*0.00003)
-            let seLat = lat - (5*0.00003)
-            let seLong = long + (5*0.00003)
+            let nwLat = lat + (SettingsHandler.Instance.gridInMeters*0.00003)
+            let nwLong = long - (SettingsHandler.Instance.gridInMeters*0.00003)
+            let seLat = lat - (SettingsHandler.Instance.gridInMeters*0.00003)
+            let seLong = long + (SettingsHandler.Instance.gridInMeters*0.00003)
             
             //Sample URL for the api call: https://api.what3words.com/v2/grid?bbox=52.208867,0.117540,52.207988,0.116126&format=json&key=BJEVPZLZ
             // Subbing in the calucalted bounding
@@ -100,7 +98,7 @@ class GridHandler {
                     print("The count of lats:  \(sortedLats.count)")
                     print("The count of longs: \(sortedLongs.count)")
                     
-                    while i < 10 {
+                    while i < SettingsHandler.Instance.rundePointsCount {
                         let randomRow    = Int(arc4random_uniform(UInt32(sortedLats.count  - 1)))
                         let randomColumn = Int(arc4random_uniform(UInt32(sortedLongs.count - 1)))
                         
