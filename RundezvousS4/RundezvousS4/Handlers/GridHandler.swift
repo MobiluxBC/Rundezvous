@@ -60,67 +60,70 @@ class GridHandler {
                 
                 if let data = data {
                     // Convert the data to JSON
-                    let json = JSON(data: data)
-                    
-                    GridHandler.Instance.lines = json["lines"]
-                    GridHandler.Instance.lines!["error"] = JSON.null
-                    let lineObject = self.lines!
-                    
-                    var lats = Set<Double>()
-                    var longs = Set<Double>();
-                    var points = [[CLLocationCoordinate2D]]();
-                    for i in 0...lineObject.count-1 {
-                        lats.insert(lineObject[i]["start"]["lat"].double!)
-                        lats.insert(lineObject[i]["end"]["lat"].double!)
-                        longs.insert(lineObject[i]["start"]["lng"].double!)
-                        longs.insert(lineObject[i]["end"]["lng"].double!)
-                    }
-                    
-                    // Sorting so that first element in 'points' is top-left, last element is bottom-right.
-                    // In other words, 'points' goes left to right, top to bottom.
-                    let sortedLats  = lats.sorted(by: >)
-                    let sortedLongs = longs.sorted()
-                    
-                    for latitude in sortedLats {
-                        var currentRow = [CLLocationCoordinate2D]()
+                    do {
+                        let json = try JSON(data: data)
                         
-                        for longitude in sortedLongs {
-                            let point = CLLocationCoordinate2D(latitude : latitude, longitude : longitude);
-                            currentRow.append(point)
+                        GridHandler.Instance.lines = json["lines"]
+                        GridHandler.Instance.lines!["error"] = JSON.null
+                        let lineObject = self.lines!
+                        
+                        var lats = Set<Double>()
+                        var longs = Set<Double>();
+                        var points = [[CLLocationCoordinate2D]]();
+                        for i in 0...lineObject.count-1 {
+                            lats.insert(lineObject[i]["start"]["lat"].double!)
+                            lats.insert(lineObject[i]["end"]["lat"].double!)
+                            longs.insert(lineObject[i]["start"]["lng"].double!)
+                            longs.insert(lineObject[i]["end"]["lng"].double!)
                         }
                         
-                        points.append(currentRow)
-                    }
-                    
-                    var randomSquares = [Square]()
-                    var i = 0
-                    
-                    print("The count of lats:  \(sortedLats.count)")
-                    print("The count of longs: \(sortedLongs.count)")
-                    
-                    while i < SettingsHandler.Instance.rundePointsCount {
-                        let randomRow    = Int(arc4random_uniform(UInt32(sortedLats.count  - 1)))
-                        let randomColumn = Int(arc4random_uniform(UInt32(sortedLongs.count - 1)))
+                        // Sorting so that first element in 'points' is top-left, last element is bottom-right.
+                        // In other words, 'points' goes left to right, top to bottom.
+                        let sortedLats  = lats.sorted(by: >)
+                        let sortedLongs = longs.sorted()
                         
-                        print("Random row: \(randomRow)")
-                        print("Random column: \(randomColumn)")
-                        
-                        if ((randomRow + 1) > sortedLats.count || (randomColumn + 1) > sortedLongs.count) {
-                            i -= 1
-                        } else {
+                        for latitude in sortedLats {
+                            var currentRow = [CLLocationCoordinate2D]()
                             
-                            let square : Square = Square(
-                                topLeftCoord     : points[randomRow][randomColumn],
-                                bottomRightCoord : points[randomRow + 1][randomColumn + 1])
-                            square.visited = false
-                            randomSquares.append(square)
-                            i += 1
+                            for longitude in sortedLongs {
+                                let point = CLLocationCoordinate2D(latitude : latitude, longitude : longitude);
+                                currentRow.append(point)
+                            }
                             
+                            points.append(currentRow)
                         }
+                        
+                        var randomSquares = [Square]()
+                        var i = 0
+                        
+                        print("The count of lats:  \(sortedLats.count)")
+                        print("The count of longs: \(sortedLongs.count)")
+                        
+                        while i < SettingsHandler.Instance.rundePointsCount {
+                            let randomRow    = Int(arc4random_uniform(UInt32(sortedLats.count  - 1)))
+                            let randomColumn = Int(arc4random_uniform(UInt32(sortedLongs.count - 1)))
+                            
+                            print("Random row: \(randomRow)")
+                            print("Random column: \(randomColumn)")
+                            
+                            if ((randomRow + 1) > sortedLats.count || (randomColumn + 1) > sortedLongs.count) {
+                                i -= 1
+                            } else {
+                                
+                                let square : Square = Square(
+                                    topLeftCoord     : points[randomRow][randomColumn],
+                                    bottomRightCoord : points[randomRow + 1][randomColumn + 1])
+                                square.visited = false
+                                randomSquares.append(square)
+                                i += 1
+                                
+                            }
+                        }
+                        
+                        handler?(randomSquares)
+                    } catch {
+                        print(error)
                     }
-                    
-                    handler?(randomSquares)
-                    
                 } else if let error = error {
                     print(error.localizedDescription)
                 }

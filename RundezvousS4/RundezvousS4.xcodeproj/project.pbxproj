@@ -19,6 +19,7 @@
 		603B25E11F7F43F300576962 /* JoinController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603B25E01F7F43F300576962 /* JoinController.swift */; };
 		603B25E31F7F4CC900576962 /* HelpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603B25E21F7F4CC900576962 /* HelpController.swift */; };
 		604917091FD7C0B100D98D53 /* Connectivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604917081FD7C0B100D98D53 /* Connectivity.swift */; };
+		608F6A711FD8F18700C1B8EB /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 608F6A721FD8F18700C1B8EB /* Alamofire.framework */; };
 		60FA49FA1F7EE15000C19574 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FA49F91F7EE15000C19574 /* AppDelegate.swift */; };
 		60FA49FC1F7EE15000C19574 /* SignInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FA49FB1F7EE15000C19574 /* SignInController.swift */; };
 		60FA49FF1F7EE15000C19574 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60FA49FD1F7EE15000C19574 /* Main.storyboard */; };
@@ -42,6 +43,18 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		608F6A701FD8F14900C1B8EB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		13E94ACE1FD3704E006199CC /* ScoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreViewController.swift; sourceTree = "<group>"; };
 		475CF75CE047C7398390185E /* Pods_RundezvousS4.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RundezvousS4.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -56,6 +69,7 @@
 		603B25E01F7F43F300576962 /* JoinController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinController.swift; sourceTree = "<group>"; };
 		603B25E21F7F4CC900576962 /* HelpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpController.swift; sourceTree = "<group>"; };
 		604917081FD7C0B100D98D53 /* Connectivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connectivity.swift; sourceTree = "<group>"; };
+		608F6A721FD8F18700C1B8EB /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60FA49F61F7EE15000C19574 /* RundezvousS4.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RundezvousS4.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60FA49F91F7EE15000C19574 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60FA49FB1F7EE15000C19574 /* SignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInController.swift; sourceTree = "<group>"; };
@@ -81,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				608F6A711FD8F18700C1B8EB /* Alamofire.framework in Frameworks */,
 				A512B930C5A2C7D40358301E /* Pods_RundezvousS4.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -196,6 +211,7 @@
 		667E5C144AFF7CE198A430CB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				608F6A721FD8F18700C1B8EB /* Alamofire.framework */,
 				475CF75CE047C7398390185E /* Pods_RundezvousS4.framework */,
 				A19AD9FA77FA86A8E87685BC /* Pods_RundezvousS4Tests.framework */,
 			);
@@ -226,6 +242,7 @@
 				60FA49F41F7EE15000C19574 /* Resources */,
 				7E9A18F5CC9F87CE7ECC5FD1 /* [CP] Embed Pods Frameworks */,
 				22DC9FE99C80C67C0D2B31EC /* [CP] Copy Pods Resources */,
+				608F6A701FD8F14900C1B8EB /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -354,7 +371,7 @@
 		};
 		7E9A18F5CC9F87CE7ECC5FD1 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
@@ -611,12 +628,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = QH5LSLE2U2;
 				INFOPLIST_FILE = RundezvousS4/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bcit.comp4977.RundezvousS4.Bryn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos11.1;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -629,12 +648,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = QH5LSLE2U2;
 				INFOPLIST_FILE = RundezvousS4/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bcit.comp4977.RundezvousS4.Bryn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos11.1;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

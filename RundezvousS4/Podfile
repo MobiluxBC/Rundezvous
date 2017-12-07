@@ -6,6 +6,7 @@ target 'RundezvousS4' do
   use_frameworks!
 
   # Pods for RundezvousS4
+  pod 'Alamofire', '~> 4.5'
   pod ‘Firebase’
   pod ‘Firebase/Core’
   pod ‘Firebase/Storage’
@@ -13,7 +14,6 @@ target 'RundezvousS4' do
   pod 'Firebase/Database'
   pod 'GoogleSignIn'
   pod 'SwiftyJSON'
-  pod 'Alamofire', '~> 4.5'
 
   target 'RundezvousS4Tests' do
     inherit! :search_paths

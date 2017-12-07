@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RundezvousS4/Controllers/MapController.swift"
-            timestampString = "534236190.6206"
+            timestampString = "534308890.625705"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
             landmarkName = "MapController"
             landmarkType = "3">
          </BreakpointContent>
