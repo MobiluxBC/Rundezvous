@@ -10,10 +10,14 @@ import UIKit
 import MapKit
 import SwiftyJSON
 
-class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UIGestureRecognizerDelegate {
+    
+    //DEBUG OPTION CHANGE WHEN PUBLISHING.
+    let DEBUG_CLICK_SET_CURR_LOC = true
     
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet var mapView: MKMapView!
+    
     
     enum PopUpState {
         case OPEN
@@ -25,7 +29,7 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
     
     
     @IBOutlet weak var timer: UILabel!
-    private var locationMAnager = CLLocationManager()
+    private var locationManager = CLLocationManager()
     private var userLocation : CLLocationCoordinate2D?
     private var isFirstLocationUpdate : Bool = true
     private var polylines : [MKPolyline] = [MKPolyline]()
@@ -37,14 +41,17 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
     
     
     @objc func action(){
+        let dgTimerUpdate = DispatchGroup()
+        dgTimerUpdate.enter()
         time -= 1
-        timer.text = String(time);
-        if(time == 0){
-            
-            performSegue(withIdentifier: "outOfTimeSegue", sender: nil)
-            dismiss(animated: true, completion: nil)
-            
-        }
+        dgTimerUpdate.leave()
+        dgTimerUpdate.notify(queue: .main, execute: {
+            self.timer.text = String(self.time);
+            if(self.time == 0){
+                self.performSegue(withIdentifier: "outOfTimeSegue", sender: nil)
+                self.dismiss(animated: true, completion: nil)
+            }
+        })
     }
     
     override func viewDidLoad() {
@@ -52,8 +59,28 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
         timer.text = String(time);
         initializeLocationManager()
         mapView.delegate = self
-        timerObject = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(MapController.action), userInfo: nil, repeats: true)
+
         // Do any additional setup after loading the view.
+        
+        
+        
+        if DEBUG_CLICK_SET_CURR_LOC {
+            let mapLTGRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleMapPress))
+            //Where is the UIElem we're listening for taps? This class.
+            //Where is the function to handle the action defined? In the class of the delegate/order taker
+            mapLTGRecognizer.delegate = self //The view is responsible to provide the function. It can modify the necessary data to carry it out
+            mapView.addGestureRecognizer(mapLTGRecognizer)
+        }
+    }
+    
+    //For Debug only
+    @objc func handleMapPress(gestureRecognizer: UILongPressGestureRecognizer) {
+        print("In handlemap press")
+        self.becomeFirstResponder()
+        let location = gestureRecognizer.location(in: mapView)
+        let coordinate : CLLocationCoordinate2D = mapView.convert(location,toCoordinateFrom: mapView)
+        userLocation = coordinate
+        popUpIfInSquare()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -74,13 +101,13 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
     }
     
     private func initializeLocationManager() {
-        locationMAnager.delegate = self
-        locationMAnager.desiredAccuracy = kCLLocationAccuracyBest
-        locationMAnager.requestWhenInUseAuthorization()
-        locationMAnager.activityType = CLActivityType.fitness
-        locationMAnager.distanceFilter = kCLDistanceFilterNone
-        locationMAnager.startUpdatingLocation()
-        locationMAnager.startUpdatingHeading()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.activityType = CLActivityType.fitness
+        locationManager.distanceFilter = kCLDistanceFilterNone
+        locationManager.startUpdatingLocation()
+        locationManager.startUpdatingHeading()
     }
     
     func dismissPopUp(_ : UIAlertAction) -> Void{
@@ -108,40 +135,59 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
         imageView.image = rectImg
         alertMessage.view.addSubview(imageView)
     }
+    
+    func popUpIfInSquare(){
+        if(!self.isFirstLocationUpdate && squares != nil){
+            if(userLocation != nil && isUserInSquares(location: userLocation!)){
+                if(popUpState == .CLOSED){
+                    popUp(message: "You found a bag of gold")
+                    //TODO: Increment score
+                    
+                    
+                }
+            }
+        }
+    }
+    
+    func locationInit(){
+        if let location = locationManager.location?.coordinate {
+            self.userLocation = location
+            let region = MKCoordinateRegion(center : self.userLocation!,
+            span : MKCoordinateSpan(latitudeDelta: 0.0001, longitudeDelta : 0.0001 ))
+        
+            mapView.setRegion(region , animated : true)
+            dgHavePoints.enter()
+            dgHaveDrawnPolyLines.enter()
+            self.dropPoints()
+            dgHavePoints.notify(queue: .main, execute: {
+                self.drawGridPolyLines()
+            })
+            dgHaveDrawnPolyLines.notify(queue: .main, execute: {
+                self.timerObject = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(MapController.action), userInfo: nil, repeats: true)
+            })
+        }
+    }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
-        // if we have the coordinates from the manager
-        if let location = locationMAnager.location?.coordinate {
-            
-            userLocation = CLLocationCoordinate2D(latitude : location.latitude, longitude : location.longitude)
-            
-            if(!self.isFirstLocationUpdate && squares != nil){
-                if(userLocation != nil && isUserInSquares(location: userLocation!)){
-                    if(popUpState == .CLOSED){
-                        popUp(message: "You found a bag of gold")
-                        //TODO: Increment score
-                        
-                        
-                    }
-                }
-            }
-            
-            
+        if self.isFirstLocationUpdate {
             // Drop the points once the user location has been set
             // only if this is the first location update
-            if(self.isFirstLocationUpdate) {
-                let region = MKCoordinateRegion(center : userLocation!,
-                                                span : MKCoordinateSpan(latitudeDelta: 0.0001, longitudeDelta : 0.0001 ))
+            locationInit()
+            self.isFirstLocationUpdate = false
+        }
+        // If you're using the emulator, disregard the locationmanger. Click to set location
+        if DEBUG_CLICK_SET_CURR_LOC {
+                //location Updates will be manually updated
+                locationManager.stopUpdatingLocation()
+                popUpIfInSquare()
+        //use when published
+        } else {
+            // if we have the coordinates from the manager
+            if let location = locationManager.location?.coordinate {
                 
-                mapView.setRegion(region , animated : true)
-                dgHavePoints.enter()
-                self.dropPoints()
-                self.isFirstLocationUpdate = false
-                
-                dgHavePoints.notify(queue: .main, execute: {
-                    self.drawGridPolyLines()
-                })
+                userLocation = CLLocationCoordinate2D(latitude : location.latitude, longitude : location.longitude)
+                popUpIfInSquare()
             }
         }
     }
@@ -180,7 +226,6 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
         let lines = GridHandler.Instance.lines ?? JSON(["error": "no lines"])
         //let polyline = MKPolyline(coordinates: &points, count: 2)
         if(lines["error"] == JSON.null ){
-            //dgHaveDrawnPolyLines.enter()
             for i in 0...lines.count-1 {
                 let start = CLLocationCoordinate2D(latitude: lines[i]["start"]["lat"].double!, longitude: lines[i]["start"]["lng"].double!)
                 let end = CLLocationCoordinate2D(latitude: lines[i]["end"]["lat"].double!, longitude: lines[i]["end"]["lng"].double!)
@@ -188,11 +233,15 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
                 let polyline = MKPolyline(coordinates: line, count: 2)
                 self.mapView.add(polyline, level: .aboveRoads)
             }
+            /*
             for item : MKOverlay in mapView.overlays {
                 print(item.debugDescription ?? "overlay is null")
             }
+             */
+            self.dgHaveDrawnPolyLines.leave()
         }else {
             print(lines["error"])
+            self.dgHaveDrawnPolyLines.leave()
         }
     }
     
