@@ -19,5 +19,6 @@ class SettingsHandler {
     
     var gridInMeters    : Double = 5
     var rundePointsCount: Int    = 10
+    var DEBUG_MODE : Bool        = false
     
 }

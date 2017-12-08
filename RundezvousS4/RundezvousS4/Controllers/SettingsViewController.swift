@@ -13,9 +13,13 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var dropPoints: UITextField!
     
     @IBOutlet weak var gridSize: UITextField!
- 
+    @IBOutlet weak var debugSwitch: UISwitch!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        gridSize.text = "5"
+        dropPoints.text = "10"
+        debugSwitch.setOn(false, animated: false)
 
         // Do any additional setup after loading the view.
     }
@@ -28,6 +32,9 @@ class SettingsViewController: UIViewController {
     @IBAction func save(_ sender: Any) {
         SettingsHandler.Instance.gridInMeters = Double(gridSize.text!)!
         SettingsHandler.Instance.rundePointsCount = Int(dropPoints.text!)!
+        SettingsHandler.Instance.DEBUG_MODE = debugSwitch.isOn
+        
+        
         
         self.navigationController?.popViewController(animated: true)
     }
