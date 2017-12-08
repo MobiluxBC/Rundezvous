@@ -12,6 +12,7 @@ import SwiftyJSON
 
 class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     
+    @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet var mapView: MKMapView!
     
     enum PopUpState {
@@ -21,6 +22,8 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
     var time = 60;
     var timerObject = Timer();
     var score = 0;
+    
+    
     @IBOutlet weak var timer: UILabel!
     private var locationMAnager = CLLocationManager()
     private var userLocation : CLLocationCoordinate2D?
@@ -52,12 +55,14 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
         timerObject = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(MapController.action), userInfo: nil, repeats: true)
         // Do any additional setup after loading the view.
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
             if (segue.identifier == "outOfTimeSegue") {
             let secondViewController = segue.destination as! ScoreViewController
             secondViewController.finalScore = String(score);
         }
     }
+    
     private func dropPoints() {
         GridHandler.Instance.getPoints { (squares) in
             self.squares = squares
@@ -80,11 +85,12 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
     
     func dismissPopUp(_ : UIAlertAction) -> Void{
         print("in dismiss Popup")
+        scoreLabel.text = String(score)
         popUpState = PopUpState.CLOSED
     }
     
     func popUp(message: String) -> Void {
-        score += 1;
+        score += 1; 
         print("In popup")
         var alertText : String = "\n\n\n\n\n\n\n\n\n\n\n\n"
         if(!message.isEmpty){
@@ -126,7 +132,7 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
             // only if this is the first location update
             if(self.isFirstLocationUpdate) {
                 let region = MKCoordinateRegion(center : userLocation!,
-                                                span : MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta : 0.001 ))
+                                                span : MKCoordinateSpan(latitudeDelta: 0.0001, longitudeDelta : 0.0001 ))
                 
                 mapView.setRegion(region , animated : true)
                 dgHavePoints.enter()
