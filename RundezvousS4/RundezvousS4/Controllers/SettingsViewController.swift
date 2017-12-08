@@ -17,10 +17,11 @@ class SettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        gridSize.text = "5"
-        dropPoints.text = "10"
+        gridSize.text = String(SettingsHandler.Instance.gridInMeters)
+        dropPoints.text = String(SettingsHandler.Instance.rundePointsCount)
         debugSwitch.setOn(false, animated: false)
-
+        
+        self.hideKeyboardWhenTappedAround()
         // Do any additional setup after loading the view.
     }
 
