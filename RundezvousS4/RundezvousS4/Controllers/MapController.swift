@@ -13,7 +13,7 @@ import SwiftyJSON
 class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UIGestureRecognizerDelegate {
     
     //DEBUG OPTION CHANGE WHEN PUBLISHING.
-    let DEBUG_CLICK_SET_CURR_LOC = true
+    var DEBUG_MODE : Bool = false
     
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet var mapView: MKMapView!
@@ -59,12 +59,13 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
         timer.text = String(time);
         initializeLocationManager()
         mapView.delegate = self
+        DEBUG_MODE = SettingsHandler.Instance.DEBUG_MODE
 
         // Do any additional setup after loading the view.
         
         
         
-        if DEBUG_CLICK_SET_CURR_LOC {
+        if DEBUG_MODE {
             let mapLTGRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleMapPress))
             //Where is the UIElem we're listening for taps? This class.
             //Where is the function to handle the action defined? In the class of the delegate/order taker
@@ -177,7 +178,7 @@ class MapController: UIViewController, MKMapViewDelegate, CLLocationManagerDeleg
             self.isFirstLocationUpdate = false
         }
         // If you're using the emulator, disregard the locationmanger. Click to set location
-        if DEBUG_CLICK_SET_CURR_LOC {
+        if DEBUG_MODE {
                 //location Updates will be manually updated
                 locationManager.stopUpdatingLocation()
                 popUpIfInSquare()
